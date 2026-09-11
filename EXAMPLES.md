@@ -460,7 +460,7 @@ Start with step 1?
 ```python
 # Immediately changes sort logic without confirming the bug
 def sort_scores(scores):
-    return sorted(scores, key=lambda x: (-x['score'], x['name']))
+    return sorted(scores, key=lambda x: -x['score'])
 ```
 
 **✅ What Should Happen (Reproduce First)**
@@ -483,7 +483,7 @@ def test_sort_with_duplicate_scores():
     assert result[1]['score'] == 100
     assert result[2]['score'] == 90
 
-# Verify: Run test 10 times → fails with inconsistent ordering
+# Verify: Test fails — Alice and Bob order matches input order, not alphabetical
 
 # 2. Now fix with stable sort
 def sort_scores(scores):
