@@ -57,6 +57,8 @@ Transform tasks into verifiable goals:
 - "Fix the bug" → "Write a test that reproduces it, then make it pass"
 - "Refactor X" → "Ensure tests pass before and after"
 
+For a new feature or bugfix, write the failing test before the implementation, not after - a test added alongside or after the code tends to confirm what you built rather than what was asked. Use the `test-driven-development` skill for the full red-green-refactor process.
+
 For multi-step tasks, state a brief plan:
 ```
 1. [Step] → verify: [check]
