@@ -129,6 +129,10 @@ curl https://raw.githubusercontent.com/forrestchang/andrej-karpathy-skills/main/
 
 This repository includes a committed Cursor project rule ([`.cursor/rules/karpathy-guidelines.mdc`](.cursor/rules/karpathy-guidelines.mdc)) so the same guidelines apply when you open the project in Cursor. See **[CURSOR.md](CURSOR.md)** for setup, using the rule in other projects, and how this relates to Claude Code.
 
+## Using with pi coding agent
+
+[pi coding agent](https://github.com/badlogic/pi) reads `CLAUDE.md` automatically, so the guidelines already apply when you run pi inside this repo. The guidelines are also published as an [Agent Skills](https://agentskills.io/specification)-compliant skill at [`skills/karpathy-guidelines/SKILL.md`](skills/karpathy-guidelines/SKILL.md), which pi supports natively — no adaptation was needed, just install it where pi looks for skills. See **[PI.md](PI.md)** for install options and how to force-load the skill.
+
 ## Key Insight
 
 From Andrej:
