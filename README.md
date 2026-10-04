@@ -29,6 +29,10 @@ Four principles in one file that directly address these issues:
 | **Surgical Changes** | Orthogonal edits, touching code you shouldn't |
 | **Goal-Driven Execution** | Leverage through tests-first, verifiable success criteria |
 
+## Explaining Agent Output
+
+Karpathy's [later post on understanding model outputs](https://x.com/karpathy/status/2105819303471976479) suggests moving beyond prose when a diagram, interactive web page, or bespoke explainer video would make a result easier to understand. The optional [`explain-agent-output` skill](skills/explain-agent-output/SKILL.md) turns that idea into guidance for human review. It favors the simplest useful format, preserves the source artifact, and does not require a paid narration service. It is separate from the four coding principles above; ordinary coding tasks do not need multimedia output.
+
 ## The Four Principles in Detail
 
 ### 1. Think Before Coding
