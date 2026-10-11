@@ -112,7 +112,19 @@ LLM 经常默默选择一种解释然后执行。这个原则强制明确推理�
 
 这会将指南安装为 Claude Code 插件，使其在你所有项目中可用。
 
-**选项 B：CLAUDE.md（按项目）**
+**选项 B：Qoder 插件**
+
+在已审查的仓库副本中，使用 Qoder CLI 校验并安装原生插件：
+
+```bash
+qoder plugins validate . --strict
+qoder plugins install .
+qoder plugins list
+```
+
+在 Qoder IDE 中，请上传一个根目录同时包含 `.qoder-plugin/` 和 `skills/` 的 ZIP。插件直接复用规范文件 `skills/karpathy-guidelines/SKILL.md`，不会维护第二份副本。
+
+**选项 C：CLAUDE.md（按项目）**
 
 新项目：
 ```bash
