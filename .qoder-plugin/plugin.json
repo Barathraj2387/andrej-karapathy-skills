@@ -1,0 +1,19 @@
+{
+  "name": "andrej-karpathy-skills",
+  "displayName": "Karpathy-Inspired Coding Guidelines",
+  "version": "1.0.0",
+  "description": "Behavioral guidelines that help Qoder avoid overcomplication, surface assumptions, make surgical changes, and work toward verifiable goals.",
+  "author": {
+    "name": "forrestchang"
+  },
+  "repository": "https://github.com/multica-ai/andrej-karpathy-skills",
+  "license": "MIT",
+  "keywords": [
+    "qoder",
+    "guidelines",
+    "best-practices",
+    "coding",
+    "karpathy"
+  ],
+  "skills": "./skills/"
+}

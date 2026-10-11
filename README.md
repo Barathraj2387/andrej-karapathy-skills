@@ -112,7 +112,19 @@ Then install the plugin:
 
 This installs the guidelines as a Claude Code plugin, making the skill available across all your projects.
 
-**Option B: CLAUDE.md (per-project)**
+**Option B: Qoder Plugin**
+
+From a reviewed checkout, validate and install the native plugin with Qoder CLI:
+
+```bash
+qoder plugins validate . --strict
+qoder plugins install .
+qoder plugins list
+```
+
+For Qoder IDE, upload a ZIP whose root contains both `.qoder-plugin/` and `skills/`. The plugin reuses the canonical `skills/karpathy-guidelines/SKILL.md`; no second copy is maintained.
+
+**Option C: CLAUDE.md (per-project)**
 
 New project:
 ```bash
