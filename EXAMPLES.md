@@ -211,12 +211,18 @@ class PreferenceManager:
 
 ```python
 def save_preferences(db, user_id: int, preferences: dict):
-    """Save user preferences to database."""
+    """Update user preferences within the caller's transaction."""
     db.execute(
         "UPDATE users SET preferences = ? WHERE id = ?",
         (json.dumps(preferences), user_id)
     )
+
+# With a sqlite3.Connection, the caller commits the transaction:
+with db:
+    save_preferences(db, 1, {'theme': 'dark'})
 ```
+
+The SQLite connection context manager commits the pending transaction on success and rolls it back on an exception. An uncommitted update is lost when the connection closes. Keeping transaction ownership with the caller also lets this update participate in a larger transaction.
 
 **Add later if needed:** Caching (when performance matters), validation (when bad data appears), merging (when requirement emerges).
 
