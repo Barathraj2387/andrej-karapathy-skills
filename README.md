@@ -125,9 +125,24 @@ echo "" >> CLAUDE.md
 curl https://raw.githubusercontent.com/forrestchang/andrej-karpathy-skills/main/CLAUDE.md >> CLAUDE.md
 ```
 
+**Option C: OpenCode**
+
+The skill in [`skills/karpathy-guidelines/`](skills/karpathy-guidelines) is already in OpenCode's skill format. Copy it to `~/.config/opencode/skills/` (every project) or `.opencode/skills/` (one project):
+
+```bash
+mkdir -p ~/.config/opencode/skills
+cp -r skills/karpathy-guidelines ~/.config/opencode/skills/
+```
+
+See **[OPENCODE.md](OPENCODE.md)** for the full setup, including how to apply the guidelines to every model automatically.
+
 ## Using with Cursor
 
 This repository includes a committed Cursor project rule ([`.cursor/rules/karpathy-guidelines.mdc`](.cursor/rules/karpathy-guidelines.mdc)) so the same guidelines apply when you open the project in Cursor. See **[CURSOR.md](CURSOR.md)** for setup, using the rule in other projects, and how this relates to Claude Code.
+
+## Using with OpenCode
+
+This repository includes a root [`AGENTS.md`](AGENTS.md), which OpenCode loads as project instructions as soon as you open the folder, and the same guidelines as an OpenCode skill in [`skills/karpathy-guidelines/`](skills/karpathy-guidelines). See **[OPENCODE.md](OPENCODE.md)** for setup, applying the rules to every model automatically, and how this relates to Claude Code and Cursor.
 
 ## Key Insight
 

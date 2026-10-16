@@ -125,9 +125,24 @@ echo "" >> CLAUDE.md
 curl https://raw.githubusercontent.com/forrestchang/andrej-karpathy-skills/main/CLAUDE.md >> CLAUDE.md
 ```
 
+**选项 C：OpenCode**
+
+本仓库的 [`skills/karpathy-guidelines/`](skills/karpathy-guidelines) 已经是 OpenCode 的技能格式。将其复制到 `~/.config/opencode/skills/`（所有项目）或 `.opencode/skills/`（单个项目）：
+
+```bash
+mkdir -p ~/.config/opencode/skills
+cp -r skills/karpathy-guidelines ~/.config/opencode/skills/
+```
+
+完整设置（包括如何让所有模型自动应用这些指南）请参见 **[OPENCODE.md](OPENCODE.md)**。
+
 ## 在 Cursor 中使用
 
 本仓库包含一个已提交的 Cursor 项目规则 ([`.cursor/rules/karpathy-guidelines.mdc`](.cursor/rules/karpathy-guidelines.mdc))，因此在 Cursor 中打开项目时同样适用这些指南。详情请参见 **[CURSOR.md](CURSOR.md)**，包括如何在其他项目中使用该规则，以及它与 Claude Code 的关系。
+
+## 在 OpenCode 中使用
+
+本仓库包含根目录的 [`AGENTS.md`](AGENTS.md)，在 OpenCode 中打开本仓库时会被自动作为项目指令加载；同样的指南也以 OpenCode 技能的形式提供在 [`skills/karpathy-guidelines/`](skills/karpathy-guidelines) 中。设置方法、如何让所有模型自动应用这些规则，以及它与 Claude Code 和 Cursor 的关系，请参见 **[OPENCODE.md](OPENCODE.md)**。
 
 ## 核心洞察
 
