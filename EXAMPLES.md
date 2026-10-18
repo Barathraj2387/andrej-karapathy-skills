@@ -226,26 +226,47 @@ def save_preferences(db, user_id: int, preferences: dict):
 
 ### Example 1: Drive-by Refactoring
 
-**User Request:** "Fix the bug where empty emails crash the validator"
+**User Request:** "Fix the bug where a missing email crashes the validator"
+
+**Current code:** The first check reads `user_data['email']` directly, so a payload without an `email` key raises `KeyError` instead of the validator's own `ValueError`.
+
+```python
+def validate_user(user_data):
+    # Check email format
+    if not user_data['email']:
+        raise ValueError("Email required")
+
+    # Basic email validation
+    if '@' not in user_data['email']:
+        raise ValueError("Invalid email")
+
+    # Check username
+    if not user_data.get('username'):
+        raise ValueError("Username required")
+
+    return True
+```
+
+**Reproduce first:** `validate_user({'username': 'alice'})` should raise `ValueError`. Right now it raises `KeyError`, so a test that asserts `ValueError` fails.
 
 **❌ What LLMs Do (Too Much)**
 
 ```diff
   def validate_user(user_data):
 -     # Check email format
--     if not user_data.get('email'):
+-     if not user_data['email']:
 +     """Validate user data."""
 +     email = user_data.get('email', '').strip()
-+     
++
 +     # Validate email
 +     if not email:
           raise ValueError("Email required")
--     
+-
 -     # Basic email validation
 -     if '@' not in user_data['email']:
 +     if '@' not in email or '.' not in email.split('@')[1]:
           raise ValueError("Invalid email")
-      
+
 -     # Check username
 -     if not user_data.get('username'):
 +     # Validate username
@@ -256,39 +277,39 @@ def save_preferences(db, user_id: int, preferences: dict):
 +         raise ValueError("Username too short")
 +     if not username.isalnum():
 +         raise ValueError("Username must be alphanumeric")
-      
+
       return True
 ```
 
 **Problems:**
-- "Improved" email validation beyond the bug fix
-- Added username validation nobody asked for
-- Changed comments
-- Added docstring
+- Rewrote the email and username checks, which the bug did not involve
+- Added username rules nobody asked for
+- Removed and changed comments
+- Added a docstring
 
 **✅ What Should Happen (Surgical)**
 
 ```diff
   def validate_user(user_data):
       # Check email format
--     if not user_data.get('email'):
-+     email = user_data.get('email', '')
-+     if not email or not email.strip():
+-     if not user_data['email']:
++     if not user_data.get('email'):
           raise ValueError("Email required")
-      
+
       # Basic email validation
--     if '@' not in user_data['email']:
-+     if '@' not in email:
+      if '@' not in user_data['email']:
           raise ValueError("Invalid email")
-      
+
       # Check username
       if not user_data.get('username'):
           raise ValueError("Username required")
-      
+
       return True
 ```
 
-**Only changed:** The specific lines that fix empty email handling.
+**Only changed:** the one line that read `email` with `[]` instead of `.get()`. The second `user_data['email']` stays, because once the first check passes the key is guaranteed to exist. Comments, the username check and the rest of the function are untouched.
+
+**Verify:** the reproduction above now raises `ValueError`, and the existing tests still pass.
 
 ### Example 2: Style Drift
 
@@ -453,44 +474,53 @@ Start with step 1?
 
 ### Example 3: Test-First Verification
 
-**User Request:** "The sorting breaks when there are duplicate scores"
+**User Request:** "Players with the same score disappear from the leaderboard"
+
+**Current code:** the dict keyed by score keeps only one entry per score, so duplicates are dropped before sorting.
+
+```python
+def sort_scores(scores):
+    """Return scores sorted by score, highest first."""
+    by_score = {s['score']: s for s in scores}  # equal scores overwrite each other
+    return sorted(by_score.values(), key=lambda x: -x['score'])
+```
 
 **❌ What LLMs Do (Fix Without Reproducing)**
 
 ```python
-# Immediately changes sort logic without confirming the bug
+# Tweaks the sort key without first confirming the bug
 def sort_scores(scores):
-    return sorted(scores, key=lambda x: (-x['score'], x['name']))
+    by_score = {s['score']: s for s in scores}
+    return sorted(by_score.values(), key=lambda x: (-x['score'], x['name']))
 ```
+
+The name tiebreak looks like a fix, but the duplicates are still dropped before the sort, so Bob is still missing.
 
 **✅ What Should Happen (Reproduce First)**
 
 ```python
-# 1. First, write a test that reproduces the issue
-def test_sort_with_duplicate_scores():
-    """Test sorting when multiple items have same score."""
+# 1. Write a test that reproduces the bug
+def test_sort_keeps_players_with_equal_scores():
     scores = [
         {'name': 'Alice', 'score': 100},
         {'name': 'Bob', 'score': 100},
         {'name': 'Charlie', 'score': 90},
     ]
-    
+
     result = sort_scores(scores)
-    
-    # The bug: order is non-deterministic for duplicates
-    # Run this test multiple times, it should be consistent
-    assert result[0]['score'] == 100
-    assert result[1]['score'] == 100
-    assert result[2]['score'] == 90
 
-# Verify: Run test 10 times → fails with inconsistent ordering
+    assert len(result) == 3
+    assert {r['name'] for r in result[:2]} == {'Alice', 'Bob'}
+    assert result[2]['name'] == 'Charlie'
 
-# 2. Now fix with stable sort
+# Verify: test FAILS (result has 2 entries, Bob is missing)
+
+# 2. Fix: sort the full list instead of a dict keyed by score
 def sort_scores(scores):
-    """Sort by score descending, then name ascending for ties."""
-    return sorted(scores, key=lambda x: (-x['score'], x['name']))
+    """Return scores sorted by score, highest first. Ties keep input order."""
+    return sorted(scores, key=lambda x: -x['score'])
 
-# Verify: Test passes consistently
+# Verify: test PASSES
 ```
 
 ---
