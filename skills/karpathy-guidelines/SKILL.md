@@ -52,6 +52,8 @@ The test: Every changed line should trace directly to the user's request.
 
 **Define success criteria. Loop until verified.**
 
+- Verify against the requirements, not just passing tests.
+
 Transform tasks into verifiable goals:
 - "Add validation" → "Write tests for invalid inputs, then make them pass"
 - "Fix the bug" → "Write a test that reproduces it, then make it pass"
